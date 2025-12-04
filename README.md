@@ -210,7 +210,7 @@ npm test
 # Ejecutar con cobertura
 npm test -- --coverage
 
-# Ejecutar tests específicos
+# Ejecutar tests específicos.
 npm test -- health.e2e.test.ts
 ```
 
