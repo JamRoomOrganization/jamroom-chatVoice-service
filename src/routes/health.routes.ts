@@ -19,6 +19,7 @@ export function createHealthRouter(): Router {
    * Returns 200 OK if the service is running.
    */
   router.get('/healthz', healthCheck);
+  router.get('/health', healthCheck);
 
   /**
    * GET /readyz

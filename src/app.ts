@@ -1,4 +1,5 @@
 import express, { Express } from 'express';
+import cors from 'cors';  // <-- AÑADE ESTA IMPORTACIÓN
 import {
   requestIdMiddleware,
   httpLoggerMiddleware,
@@ -7,33 +8,6 @@ import {
 } from './middleware';
 import { registerRoutes } from './routes';
 
-/**
- * Creates and configures the Express application.
- *
- * This factory function builds the app with all middleware and routes
- * registered in the correct order. It does NOT start the server,
- * making it ideal for testing.
- *
- * Middleware order:
- * 1. requestId - Assigns/propagates request trace ID
- * 2. httpLogger - Logs incoming requests
- * 3. JSON parser - Parses JSON request bodies
- * 4. Routes - Application endpoints
- * 5. notFoundHandler - Handles 404 for unmatched routes
- * 6. errorHandler - Global error handling (must be last)
- *
- * @returns Configured Express application instance
- *
- * @example
- * ```typescript
- * // For testing
- * import { createApp } from './app';
- * import request from 'supertest';
- *
- * const app = createApp();
- * const response = await request(app).get('/healthz');
- * ```
- */
 export function createApp(): Express {
   const app = express();
 
@@ -48,7 +22,29 @@ export function createApp(): Express {
   // 2. HTTP request logging - logs all incoming requests with requestId
   app.use(httpLoggerMiddleware);
 
-  // 3. Body parsing middleware
+  // 3. CORS middleware - ¡AGREGA ESTO! (después de logging, antes de body parsing)
+  const allowedOrigins = process.env.CORS_ORIGIN 
+    ? process.env.CORS_ORIGIN.split(',') 
+    : ['https://jamroom-front.vercel.app'];
+  
+  app.use(cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      
+      // Log blocked origins for debugging
+      console.warn(`CORS blocked for origin: ${origin}`);
+      return callback(new Error('Not allowed by CORS'), false);
+    },
+    credentials: true,
+    exposedHeaders: ['set-cookie', 'authorization']
+  }));
+
+  // 4. Body parsing middleware
   app.use(express.json({ limit: '1mb' }));
   app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
