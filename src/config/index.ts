@@ -59,6 +59,7 @@ function createConfig(): AppConfig {
   return {
     PORT: env.PORT,
     NODE_ENV: env.NODE_ENV,
+    CORS_ORIGIN: env.CORS_ORIGIN,
     serviceName: 'chatVoice-service',
     isProduction: env.NODE_ENV === 'production',
     isDevelopment: env.NODE_ENV === 'development',
