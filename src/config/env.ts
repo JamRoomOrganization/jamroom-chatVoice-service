@@ -32,6 +32,10 @@ const envSchema = z.object({
     .enum(['development', 'test', 'production'])
     .default('development'),
 
+  CORS_ORIGIN: z
+    .string()
+    .default('http://localhost:3000'),
+
   // =========================================================================
   // LIVEKIT CONFIGURATION (Optional - required only for voice features)
   // =========================================================================
