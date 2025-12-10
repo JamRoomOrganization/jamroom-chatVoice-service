@@ -7,12 +7,14 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  test:
+  test-and-sonar:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # importante para SonarCloud
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -26,10 +28,11 @@ jobs:
       - name: Run tests with coverage
         run: npm test -- --coverage
 
-      - name: Upload coverage report
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: chatvoice-coverage
-          path: coverage
+          projectBaseDir: .
 
