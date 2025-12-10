@@ -1,16 +1,10 @@
-name: CI - voice-service
+name: CI - chatVoice-service
 
 on:
   push:
     branches: [ main, develop ]
-    paths:
-      - 'services/voice-service/**'
-      - '.github/workflows/ci-voice-service.yml'
   pull_request:
     branches: [ main, develop ]
-    paths:
-      - 'services/voice-service/**'
-      - '.github/workflows/ci-voice-service.yml'
 
 jobs:
   test:
@@ -27,16 +21,15 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        working-directory: services/voice-service
         run: npm ci
 
       - name: Run tests with coverage
-        working-directory: services/voice-service
         run: npm test -- --coverage
 
       - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: voice-service-coverage
-          path: services/voice-service/coverage
+          name: chatvoice-coverage
+          path: coverage
+
