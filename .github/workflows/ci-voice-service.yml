@@ -1,0 +1,44 @@
+name: CI - voice-service
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'services/voice-service/**'
+      - '.github/workflows/ci-voice-service.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'services/voice-service/**'
+      - '.github/workflows/ci-voice-service.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: |
+            services/voice-service/package-lock.json
+
+      - name: Install dependencies
+        working-directory: services/voice-service
+        run: npm ci
+
+      - name: Run tests with coverage
+        working-directory: services/voice-service
+        run: npm test -- --coverage
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: voice-service-coverage
+          path: services/voice-service/coverage
