@@ -1,0 +1,46 @@
+{
+  "name": "chatvoice-service",
+  "version": "1.0.0",
+  "description": "Chat and Voice microservice for JamRoom platform",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "test": "jest --runInBand --coverage",
+    "build": "tsc",
+    "test:ci": "jest --coverage --ci",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "jamroom",
+    "chatvoice",
+    "microservice"
+  ],
+  "author": "JamRoomOrganization",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.1",
+    "livekit-server-sdk": "^2.14.2",
+    "pino": "^9.5.0",
+    "pino-http": "^10.3.0",
+    "uuid": "^11.0.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.9.0",
+    "@types/supertest": "^6.0.2",
+    "@types/uuid": "^10.0.0",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.5",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
