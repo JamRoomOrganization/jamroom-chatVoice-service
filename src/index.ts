@@ -19,7 +19,7 @@ async function main(): Promise<void> {
     const app = createApp();
 
     // Start the HTTP server
-    const server = app.listen(config.PORT, '0.0.0.0', () => {
+    const server = app.listen(config.PORT, '::', () => {
       logStartup(config.PORT);
     });
 
