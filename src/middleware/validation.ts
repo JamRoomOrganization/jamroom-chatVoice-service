@@ -90,6 +90,17 @@ export function validateRequest(schema: RequestSchema) {
     } catch (err) {
       // Handle Zod validation errors
       if (err instanceof ZodError) {
+        console.error('[validation] Invalid request payload', {
+          method: req.method,
+          path: req.path,
+          contentType: req.headers['content-type'],
+          xRequestId: req.headers['x-request-id'],
+          bodyType: typeof req.body,
+          bodyKeys: req.body && typeof req.body === 'object' ? Object.keys(req.body) : null,
+          body: req.body, // temporal para depurar
+          issues: err.issues,
+        });
+
         const appError = AppError.validationError(
           'Invalid request payload',
           formatZodError(err)
